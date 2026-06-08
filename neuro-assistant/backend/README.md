@@ -1,24 +1,24 @@
 # Neuro Assistant Backend
-FastAPI backend для анализа состояния пользователя по EEG-метрикам концентрации/расслабленности, определения эмоции (SAD/HAPPY/CALM) и генерации рекомендации через Ollama.
+FastAPI backend for analyzing user state based on EEG metrics of concentration/relaxation levels, emotion detection, and AI-powered recommendations.
 
-## Стек
+## Stack
 - Python 3.10+
 - FastAPI + Uvicorn
 - PostgreSQL
 - SQLAlchemy (async)
 - Ollama (`DistilQwen3-1.7B-uncensored:latest`)
 
-## Подготовка
+## Setup
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Переменные окружения
-Используется файл `.env` в директории `backend/`.
+## Environment Variables
+Uses a `.env` file in the `backend/` directory.
 
-Пример:
+Example:
 ```env
 APP_NAME=Neuro Assistant API
 APP_HOST=0.0.0.0
@@ -30,27 +30,27 @@ MODEL_NAME=DistilQwen3-1.7B-uncensored:latest
 OLLAMA_TIMEOUT_SECONDS=30
 ```
 
-## Инициализация БД и сиды
+## Database Initialization and Seeds
 ```bash
 python scripts/init_database.py
 python scripts/add_calibration_users.py
 python scripts/add_calibration_users.py --include-samples
 ```
 
-## Запуск API
+## Running the API
 ```bash
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-Документация Swagger: `http://localhost:8000/docs`
+Swagger documentation: `http://localhost:8000/docs`
 
-## Основные эндпоинты
-- `POST /api/calibrate` — сохранить сырые калибровочные данные
-- `POST /api/calculate-ranges` — посчитать AVG/MIN/MAX по эмоциям
-- `GET /api/thresholds` — посмотреть рассчитанные пороги
-- `POST /api/analyze` — определить эмоцию и получить AI-рекомендацию
+## Main Endpoints
+- `POST /api/calibrate` — save raw calibration data
+- `POST /api/calculate-ranges` — calculate AVG/MIN/MAX per emotion
+- `GET /api/thresholds` — view calculated thresholds
+- `POST /api/analyze` — detect emotion and get AI recommendation
 
-## Быстрые запросы
+## Quick Requests
 ```bash
 curl -X POST http://localhost:8000/api/calibrate \
   -H "Content-Type: application/json" \
@@ -67,7 +67,7 @@ curl -X POST http://localhost:8000/api/analyze \
   -d '{"concentration": 30, "relaxation": 20}'
 ```
 
-## Проверка Ollama
+## Checking Ollama
 ```bash
 python scripts/test_ollama.py
 ```
