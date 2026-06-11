@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 
-from app.api.routes_admin import router as admin_router
-from app.api.routes_calibration import router as calibration_router
-from app.api.routes_production import router as production_router
+from app.api.routes_analyze import router as analyze_router
 from app.config import get_settings
 from app.utils.logger import configure_logging
 
@@ -16,9 +14,7 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-app.include_router(calibration_router)
-app.include_router(admin_router)
-app.include_router(production_router)
+app.include_router(analyze_router)
 
 
 @app.get("/", tags=["system"])

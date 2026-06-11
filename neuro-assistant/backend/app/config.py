@@ -9,10 +9,12 @@ class Settings(BaseSettings):
     app_port: int = 8000
     debug: bool = False
 
-    database_url: str = "postgresql+asyncpg://neuro_user:YourStrongPassword123!@localhost/neuro_assistant"
+    database_url: str = "postgresql+asyncpg://neuro_user:YourStrongPassword123!@localhost:5432/neuro_assistant"
     ollama_url: str = "http://localhost:11434/api/generate"
     model_name: str = "DistilQwen3-1.7B-uncensored:latest"
     ollama_timeout_seconds: int = 30
+    poor_signal_threshold: int = 25
+    db_write_enabled: bool = False
 
     model_config = SettingsConfigDict(
         env_file=".env",
