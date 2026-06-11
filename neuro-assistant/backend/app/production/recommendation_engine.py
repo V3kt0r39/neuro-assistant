@@ -1,40 +1,55 @@
 import httpx
 
 from app.config import get_settings
+from app.production.emotion_detector import detect_emotion
 from app.utils.logger import get_logger
 
 settings = get_settings()
 logger = get_logger(__name__)
 
-_FALLBACK_RECOMMENDATIONS = {
-    "SAD": "Take a short pause, breathe deeply for one minute, and focus on one small task you can complete now.",
-    "HAPPY": "Keep this momentum by noting what supports your mood and sharing one positive action with someone nearby.",
-    "CALM": "Maintain your calm state with slow breathing and a brief mindful check-in before moving to the next task.",
-}
 
-
-def build_prompt(emotion: str, concentration: float, relaxation: float) -> str:
+def build_prompt(
+    concentration: float,
+    relaxation: float,
+    emotion: str,
+    global_avg_concentration: float,
+    global_avg_relaxation: float,
+) -> str:
+    conc_diff = concentration - global_avg_concentration
+    relax_diff = relaxation - global_avg_relaxation
     return (
         "You are a professional psychological AI assistant. "
-        f"User's neurointerface data: Concentration = {concentration:.2f}%, "
-        f"Relaxation = {relaxation:.2f}%, Detected emotion = {emotion}. "
-        "Provide a short, supportive, and actionable psychological recommendation "
-        "on how to improve or sustain their emotional state. Keep it under 50 words. "
-        "Do not use markdown formatting."
+        "User's current neurointerface data: "
+        f"Concentration = {concentration:.2f}%, Relaxation = {relaxation:.2f}%. "
+        f"Detected emotional state: {emotion}. "
+        "Global baseline (from all records in DB): "
+        f"avg_concentration={global_avg_concentration:.2f}%, "
+        f"avg_relaxation={global_avg_relaxation:.2f}%. "
+        "Deviation from baseline: "
+        f"concentration {conc_diff:+.2f}%, relaxation {relax_diff:+.2f}%. "
+        "Provide a short, supportive psychological recommendation considering "
+        "the current state vs global baseline. Keep it under 50 words. No markdown."
     )
 
 
-def fallback_recommendation(emotion: str) -> str:
-    return _FALLBACK_RECOMMENDATIONS.get(
-        emotion,
-        "Take three deep breaths, drink some water, and reassess how you feel before continuing.",
-    )
-
-
-async def get_ai_recommendation(emotion: str, concentration: float, relaxation: float) -> str:
+async def get_ai_recommendation(
+    concentration: float,
+    relaxation: float,
+    global_avg_concentration: float,
+    global_avg_relaxation: float,
+) -> dict[str, str | dict[str, float]]:
+    emotion = detect_emotion(concentration, relaxation)
+    conc_diff = concentration - global_avg_concentration
+    relax_diff = relaxation - global_avg_relaxation
     payload = {
         "model": settings.model_name,
-        "prompt": build_prompt(emotion, concentration, relaxation),
+        "prompt": build_prompt(
+            concentration=concentration,
+            relaxation=relaxation,
+            emotion=emotion,
+            global_avg_concentration=global_avg_concentration,
+            global_avg_relaxation=global_avg_relaxation,
+        ),
         "stream": False,
     }
 
@@ -47,5 +62,17 @@ async def get_ai_recommendation(emotion: str, concentration: float, relaxation: 
     if not recommendation:
         raise ValueError("Ollama returned an empty recommendation.")
 
-    logger.info("AI recommendation generated for emotion=%s", emotion)
-    return recommendation
+    logger.info(
+        "AI recommendation generated: emotion=%s concentration=%.2f relaxation=%.2f",
+        emotion,
+        concentration,
+        relaxation,
+    )
+    return {
+        "emotion": emotion,
+        "recommendation": recommendation,
+        "deviation": {
+            "concentration": round(conc_diff, 2),
+            "relaxation": round(relax_diff, 2),
+        },
+    }
