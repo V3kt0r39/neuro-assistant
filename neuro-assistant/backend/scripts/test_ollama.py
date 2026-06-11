@@ -9,13 +9,15 @@ from app.production.recommendation_engine import get_ai_recommendation
 
 
 async def main() -> None:
-    recommendation = await get_ai_recommendation(
-        emotion="CALM",
+    result = await get_ai_recommendation(
         concentration=55,
         relaxation=70,
+        global_avg_concentration=43.0,
+        global_avg_relaxation=42.67,
     )
     print("Ollama connection is working.")
-    print(f"Recommendation: {recommendation}")
+    print(f"Detected emotion: {result['emotion']}")
+    print(f"Recommendation: {result['recommendation']}")
 
 
 if __name__ == "__main__":
