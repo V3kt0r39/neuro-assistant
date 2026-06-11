@@ -1,28 +1,17 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, status
+from fastapi.responses import JSONResponse
 
-from app.calibration.collector import save_calibration_record
-from app.database.connection import get_db_session
-from app.utils.validators import CalibrationRequest, CalibrationResponse
+router = APIRouter(prefix="/api", tags=["deprecated"])
 
-router = APIRouter(prefix="/api", tags=["calibration"])
-
-
-@router.post(
-    "/calibrate",
-    response_model=CalibrationResponse,
-    status_code=status.HTTP_201_CREATED,
+DEPRECATED_MESSAGE = (
+    "Calibration endpoint is deprecated in the current specification. "
+    "Use POST /api/analyze with concentration, relaxation, poor_signal."
 )
-async def calibrate(
-    payload: CalibrationRequest,
-    session: AsyncSession = Depends(get_db_session),
-) -> CalibrationResponse:
-    try:
-        record = await save_calibration_record(session, payload)
-    except ValueError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(exc),
-        ) from exc
 
-    return CalibrationResponse(status="success", record_id=record.id)
+
+@router.post("/calibrate")
+async def calibrate() -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_410_GONE,
+        content={"status": "error", "error": "deprecated_endpoint", "message": DEPRECATED_MESSAGE},
+    )
