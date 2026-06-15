@@ -6,7 +6,7 @@ import uvicorn
 import psycopg2
 
 # --- SETTINGS ---
-# Settings for connecting to local PostgreSQL (port 5432)
+# Settings for connecting to local PostgreSQL 
 DB_CONFIG = {
     "dbname": "your_db_name",       # Replace with your database name
     "user": "your_bd_user",      # Replace with your database user
