@@ -6,7 +6,7 @@ from app.config import get_settings
 from app.database.connection import get_db_session
 from app.production.recommendation_engine import get_ai_recommendation
 from app.utils.logger import get_logger, log_incoming, log_processed, log_rejected
-from app.utils.statistics import get_global_averages
+from app.utils.statistics import get_emotion_profile_from_raw_data, get_global_averages
 from app.utils.validators import AnalyzeErrorResponse, AnalyzeRequest, AnalyzeResponse
 
 router = APIRouter(prefix="/api", tags=["analyze"])
@@ -58,12 +58,15 @@ async def analyze(
         )
 
     global_averages = await get_global_averages(session)
+    emotion_profile = await get_emotion_profile_from_raw_data(session)
     try:
         ai_result = await get_ai_recommendation(
             concentration=payload.concentration,
             relaxation=payload.relaxation,
             global_avg_concentration=float(global_averages["avg_concentration"]),
             global_avg_relaxation=float(global_averages["avg_relaxation"]),
+            emotion_ranges=emotion_profile["ranges"],
+            emotion_centers=emotion_profile["centers"],
         )
     except Exception as exc:  # noqa: BLE001
         logger.exception("Failed to generate AI recommendation via Ollama")

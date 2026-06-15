@@ -5,7 +5,7 @@ Production FastAPI service that receives EEG metrics and returns an AI-generated
 - Accepts runtime EEG data: `concentration`, `relaxation`, `poor_signal`.
 - Rejects noisy signals when `poor_signal > POOR_SIGNAL_THRESHOLD`.
 - Reads all records from `data_original` to compute global averages.
-- Detects emotion (`SAD`, `HAPPY`, `CALM`) from concept-defined ranges.
+- Builds emotion ranges (`SAD`, `HAPPY`, `CALM`) dynamically from raw `data_original` records using the concept formula, then detects emotion.
 - Calls Ollama to generate a short recommendation.
 - Logs all request outcomes to `logs/requests.log`.
 
@@ -86,13 +86,19 @@ Then computes:
 - safe zero handling when table is empty
 
 ### Emotion detection
-`app/production/emotion_detector.py`:
-- Uses fixed ranges:
-  - `SAD`: concentration 0..40.5, relaxation 35..100
-  - `HAPPY`: concentration 77.75..100, relaxation 0..15
-  - `CALM`: concentration 0..13.5, relaxation 76..100
-- Checks order: `CALM`, `HAPPY`, `SAD` (so overlap with `SAD` still allows `CALM`).
-- If no range match, uses Euclidean distance to emotion centers.
+`app/utils/statistics.py` + `app/production/emotion_detector.py`:
+- Reads all raw pairs `(concentration, relaxation)` from `data_original`.
+- Computes global average concentration/relaxation.
+- Splits points into buckets:
+  - `HAPPY`: concentration >= global_avg_concentration and relaxation <= global_avg_relaxation
+  - `CALM`: concentration <= global_avg_concentration and relaxation >= global_avg_relaxation
+  - `SAD`: all remaining points
+- Computes bucket averages (emotion centers), then builds ranges by concept formula:
+  - `SAD`: concentration from `sad_avg_concentration` to `happy_avg_concentration`, relaxation from `sad_avg_relaxation` to `calm_avg_relaxation`
+  - `HAPPY`: concentration from `happy_avg_concentration` to `100`, relaxation from `0` to `happy_avg_relaxation`
+  - `CALM`: concentration from `0` to `calm_avg_concentration`, relaxation from `calm_avg_relaxation` to `100`
+- Range check order remains: `CALM`, `HAPPY`, `SAD`.
+- If no range match, fallback is Euclidean distance to computed centers.
 
 ### Recommendation generation
 `app/production/recommendation_engine.py`:

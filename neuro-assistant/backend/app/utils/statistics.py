@@ -2,6 +2,12 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.models import DataOriginal
+from app.production.emotion_detector import (
+    DEFAULT_EMOTION_CENTERS,
+    DEFAULT_EMOTION_RANGES,
+    EmotionProfile,
+    build_emotion_profile_from_points,
+)
 
 
 async def get_global_averages(session: AsyncSession) -> dict[str, float | int]:
@@ -28,3 +34,16 @@ async def get_global_averages(session: AsyncSession) -> dict[str, float | int]:
         "avg_relaxation": round(avg_relaxation, 2),
         "total_records": records_count,
     }
+
+
+async def get_emotion_profile_from_raw_data(session: AsyncSession) -> EmotionProfile:
+    query = select(DataOriginal.concentration, DataOriginal.relaxation)
+    result = await session.execute(query)
+    rows = result.all()
+    points = [(float(concentration), float(relaxation)) for concentration, relaxation in rows]
+    if not points:
+        return {
+            "ranges": DEFAULT_EMOTION_RANGES,
+            "centers": DEFAULT_EMOTION_CENTERS,
+        }
+    return build_emotion_profile_from_points(points)

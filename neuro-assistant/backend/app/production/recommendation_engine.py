@@ -37,8 +37,15 @@ async def get_ai_recommendation(
     relaxation: float,
     global_avg_concentration: float,
     global_avg_relaxation: float,
+    emotion_ranges: dict[str, dict[str, tuple[float, float]]] | None = None,
+    emotion_centers: dict[str, dict[str, float]] | None = None,
 ) -> dict[str, str | dict[str, float]]:
-    emotion = detect_emotion(concentration, relaxation)
+    emotion = detect_emotion(
+        concentration=concentration,
+        relaxation=relaxation,
+        emotion_ranges=emotion_ranges,
+        emotion_centers=emotion_centers,
+    )
     conc_diff = concentration - global_avg_concentration
     relax_diff = relaxation - global_avg_relaxation
     payload = {
