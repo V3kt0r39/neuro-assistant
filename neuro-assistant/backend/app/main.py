@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 
 from app.api.routes_analyze import router as analyze_router
+from app.api.routes_calibration_range import router as calibration_range_router
+from app.api.routes_ranges import router as ranges_router
 from app.config import get_settings
 from app.utils.logger import configure_logging
 
@@ -15,6 +17,8 @@ app = FastAPI(
 )
 
 app.include_router(analyze_router)
+app.include_router(ranges_router)
+app.include_router(calibration_range_router)
 
 
 @app.get("/", tags=["system"])

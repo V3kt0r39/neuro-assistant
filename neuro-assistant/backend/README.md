@@ -7,10 +7,12 @@ Production FastAPI service that receives EEG metrics and returns an AI-generated
 - Reads all records from `data_original` to compute global averages.
 - Builds emotion ranges (`SAD`, `HAPPY`, `CALM`) dynamically from raw `data_original` records using the concept formula, then detects emotion.
 - Calls Ollama to generate a short recommendation.
+- Exposes emotion sampling ranges via `GET /api/ranges` for neurointerface calibration and testing.
+- Exposes calibration configuration ranges via `GET /api/calibration-range` for neurointerface testing setup.
 - Logs all request outcomes to `logs/requests.log`.
 
 ## Current project state (important)
-- Active API in runtime: `POST /api/analyze`.
+- Active API in runtime: `POST /api/analyze`, `GET /api/ranges`, `GET /api/calibration-range`.
 - Health/system endpoints: `GET /`, `GET /health`.
 - Calibration/admin endpoints exist in codebase but are deprecated in current specification (`routes_calibration.py`, `routes_admin.py`) and are not mounted by `app/main.py`.
 - Analyze flow is read-only for database writes (it only reads `data_original`).
@@ -23,6 +25,8 @@ Production FastAPI service that receives EEG metrics and returns an AI-generated
 5. `app/production/emotion_detector.py` determines emotion.
 6. `app/production/recommendation_engine.py` builds prompt and calls Ollama.
 7. Route logs `PROCESSED` and returns structured JSON response.
+8. `GET /api/ranges` queries `data_original` and returns the current emotion detection ranges, centers, and global averages — useful for neurointerface calibration and testing.
+9. `GET /api/calibration-range` returns valid parameter ranges and thresholds for neurointerface testing configuration.
 
 ## Repository structure
 ```text
@@ -30,6 +34,8 @@ backend/
 ├── app/
 │   ├── api/
 │   │   ├── routes_analyze.py       # active production endpoint
+│   │   ├── routes_ranges.py        # GET /api/ranges — emotion sampling ranges
+│   │   ├── routes_calibration_range.py  # GET /api/calibration-range — testing config
 │   │   ├── routes_admin.py         # deprecated
 │   │   ├── routes_calibration.py   # deprecated
 │   │   └── routes_production.py    # compatibility alias
@@ -116,12 +122,165 @@ Then computes:
   - generated recommendation text
   - `deviation` object
 
+## Emotion sampling ranges (`GET /api/ranges`)
+Returns the dynamically computed emotion detection ranges and centers used by the neurointerface for calibration and testing.
+
+### How it works
+- `app/api/routes_ranges.py` calls `get_global_averages()` and `get_emotion_profile_from_raw_data()`.
+- The profile is built from all `(concentration, relaxation)` pairs in `data_original`.
+- Points are classified into SAD/HAPPY/CALM buckets based on global average.
+- Bucket means become emotion centers; ranges are derived from the concept formula.
+
+### Response schema
+```json
+{
+  "status": "success",
+  "global_average": {
+    "concentration": 54.23,
+    "relaxation": 48.75,
+    "total_records": 7653
+  },
+  "emotion_ranges": {
+    "SAD": {
+      "concentration": [40.5, 77.75],
+      "relaxation": [35.0, 76.0]
+    },
+    "HAPPY": {
+      "concentration": [77.75, 100.0],
+      "relaxation": [0.0, 15.0]
+    },
+    "CALM": {
+      "concentration": [0.0, 13.5],
+      "relaxation": [76.0, 100.0]
+    }
+  },
+  "emotion_centers": {
+    "SAD": { "concentration": 40.5, "relaxation": 35.0 },
+    "HAPPY": { "concentration": 77.75, "relaxation": 15.0 },
+    "CALM": { "concentration": 13.5, "relaxation": 76.0 }
+  }
+}
+```
+
+### Response fields
+- `global_average`: current global baseline from `data_original`.
+- `emotion_ranges`: per-emotion `concentration` and `relaxation` interval `["lower", "upper"]`.
+- `emotion_centers`: per-emotion centroid point `(concentration, relaxation)`.
+- If `data_original` is empty, default hardcoded ranges are returned.
+
+## Calibration configuration ranges (`GET /api/calibration-range`)
+Returns the valid configuration ranges and parameters for testing the neurointerface. This endpoint provides the input parameter boundaries, step sizes, and current global averages needed to configure test scenarios.
+
+### How it works
+- `app/api/routes_calibration_range.py` queries `get_global_averages()` to fetch current baseline.
+- Returns predefined valid ranges for `concentration`, `relaxation`, and `poor_signal` parameters.
+- Includes the `poor_signal_threshold` from configuration.
+- Returns current global averages and total record count from the database.
+
+### Response schema
+```json
+{
+  "status": "success",
+  "concentration": {
+    "min": 0.0,
+    "max": 100.0,
+    "step": 0.1,
+    "unit": "%"
+  },
+  "relaxation": {
+    "min": 0.0,
+    "max": 100.0,
+    "step": 0.1,
+    "unit": "%"
+  },
+  "poor_signal": {
+    "min": 0.0,
+    "max": 100.0,
+    "step": 1.0,
+    "unit": "%"
+  },
+  "poor_signal_threshold": 25,
+  "global_average": {
+    "concentration": 54.23,
+    "relaxation": 48.75
+  },
+  "total_records": 7653
+}
+```
+
+### Response fields
+- `concentration`: valid range for concentration parameter (min, max, step, unit).
+- `relaxation`: valid range for relaxation parameter (min, max, step, unit).
+- `poor_signal`: valid range for poor_signal parameter (min, max, step, unit).
+- `poor_signal_threshold`: current threshold for signal rejection (from `POOR_SIGNAL_THRESHOLD` env var).
+- `global_average`: current global baseline from `data_original`.
+- `total_records`: total number of records in `data_original`.
+
 ## API reference
 ### `GET /`
 Returns service message and docs path.
 
 ### `GET /health`
 Returns `{"status": "ok"}`.
+
+### `GET /api/ranges`
+Returns emotion sampling ranges, centers, and global averages for neurointerface calibration.
+
+### `GET /api/calibration-range`
+Returns configuration ranges for neurointerface testing setup, including valid parameter ranges, thresholds, and current global averages.
+
+#### Success `200`
+```json
+{
+  "status": "success",
+  "concentration": {
+    "min": 0.0,
+    "max": 100.0,
+    "step": 0.1,
+    "unit": "%"
+  },
+  "relaxation": {
+    "min": 0.0,
+    "max": 100.0,
+    "step": 0.1,
+    "unit": "%"
+  },
+  "poor_signal": {
+    "min": 0.0,
+    "max": 100.0,
+    "step": 1.0,
+    "unit": "%"
+  },
+  "poor_signal_threshold": 25,
+  "global_average": {
+    "concentration": 54.23,
+    "relaxation": 48.75
+  },
+  "total_records": 7653
+}
+```
+
+#### Success `200`
+```json
+{
+  "status": "success",
+  "global_average": {
+    "concentration": 54.23,
+    "relaxation": 48.75,
+    "total_records": 7653
+  },
+  "emotion_ranges": {
+    "SAD": { "concentration": [40.5, 77.75], "relaxation": [35.0, 76.0] },
+    "HAPPY": { "concentration": [77.75, 100.0], "relaxation": [0.0, 15.0] },
+    "CALM": { "concentration": [0.0, 13.5], "relaxation": [76.0, 100.0] }
+  },
+  "emotion_centers": {
+    "SAD": { "concentration": 40.5, "relaxation": 35.0 },
+    "HAPPY": { "concentration": 77.75, "relaxation": 15.0 },
+    "CALM": { "concentration": 13.5, "relaxation": 76.0 }
+  }
+}
+```
 
 ### `POST /api/analyze`
 #### Success `200`
@@ -204,7 +363,17 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 Swagger UI: `http://localhost:8000/docs`
 
 ## Request examples
-### Success path
+### Get emotion sampling ranges
+```bash
+curl http://localhost:8000/api/ranges
+```
+
+### Get calibration configuration ranges
+```bash
+curl http://localhost:8000/api/calibration-range
+```
+
+### Success path (analyze)
 ```bash
 curl -X POST http://localhost:8000/api/analyze \
   -H "Content-Type: application/json" \
@@ -244,6 +413,6 @@ GRANT SELECT ON TABLE public.data_original TO neuro_user;
 - Re-run `python scripts/init_database.py`.
 
 ## Notes for maintainers
-- `app/main.py` currently mounts only `routes_analyze`.
+- `app/main.py` currently mounts only `routes_analyze`, `routes_ranges`, and `routes_calibration_range`.
 - Deprecated modules are intentionally left for compatibility/history but are not part of active runtime flow.
 - If you re-enable calibration endpoints, update `main.py`, validators, and README together.
