@@ -8,11 +8,11 @@ import psycopg2
 # --- SETTINGS ---
 # Settings for connecting to local PostgreSQL (port 5432)
 DB_CONFIG = {
-    "dbname": "eeg_data",       # Replace with your database name
-    "user": "egg_bd_user",      # Replace with your database user
-    "password": "1234!@#$",     # Replace with your password
+    "dbname": "your_db_name",       # Replace with your database name
+    "user": "your_bd_user",      # Replace with your database user
+    "password": "your_strong_password",     # Replace with your password
     "host": "127.0.0.1",
-    "port": "5432"
+    "port": "your_db_port"
 }
 
 # Global variable to store the selected user_id
