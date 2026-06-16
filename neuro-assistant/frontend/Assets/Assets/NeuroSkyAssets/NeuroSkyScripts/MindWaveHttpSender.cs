@@ -9,7 +9,7 @@ namespace MindWave
     public class MindWaveHttpSender : MonoBehaviour
     {
         [Header("HTTP settings")]
-        public string endpointUrl = "http://stray-lid2.mooo.com:8000/api/analyze";
+        public string endpointUrl = "";
 
         [Tooltip("Как часто отправлять данные. 1.0 = раз в секунду, 0.5 = два раза в секунду")]
         public float sendInterval = 1.0f;
