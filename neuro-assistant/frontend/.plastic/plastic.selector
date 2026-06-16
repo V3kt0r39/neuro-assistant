@@ -1,0 +1,4 @@
+repository "YUI@King_Hold@cloud"
+  path "/"
+    br "/main"
+    co "/main"
