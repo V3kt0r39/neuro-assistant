@@ -181,7 +181,7 @@ neuro-assistant/
 
 ## 📄 License
 
-See [LICENSE.md](LICENSE) for details.
+See [LICENSE](LICENSE) for details.
 
 ---
 
