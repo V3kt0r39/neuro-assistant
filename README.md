@@ -64,7 +64,6 @@ Request processing workflow (`POST /api/analyze`)
 PROCESSED — when processed successfully (contains emotion, recommendation, global averages).
 
 8. Structured JSON return:
---------------------------------------------------------------
 {
   "status": "success",
   "detected_emotion": "SAD|HAPPY|CALM",
@@ -73,7 +72,7 @@ PROCESSED — when processed successfully (contains emotion, recommendation, glo
   "global_average": {"concentration": ..., "relaxation": ..., "total_records":... },
   "deviation": {"concentration": ..., "relaxation": ... }
 }
---------------------------------------------------------------
+
 Auxiliary endpoints
 
 · GET /api/ranges — returns:
@@ -99,7 +98,7 @@ The data_original table with the following structure is used:
 Important: DB entry is disabled in the current specification (DB_WRITE_ENABLED=false). The server is read-only — this is to simplify and prevent duplication of data (writing is done by other components, such as parsers). If necessary, you can enable the record by changing the flag in.env and adding the corresponding code in routes_analyze.py (there is no record in the current implementation).
 
 Configuration (.env file)
---------------------------------------------------------------
+{
 APP_NAME=Neuro Assistant API
 APP_HOST=0.0.0.0
 APP_PORT=8000
@@ -113,7 +112,7 @@ OLLAMA_TIMEOUT_SECONDS=30
 
 POOR_SIGNAL_THRESHOLD=25
 DB_WRITE_ENABLED=false
---------------------------------------------------------------
+}
 
 Unity client
 
@@ -150,7 +149,7 @@ PreserveGameObject
 Unity project structure
 The project must be opened from the root folder where the Assets/folder is located.
 Expected structure:
---------------------------------------------------------------
+{
 YUI/
   Assets/
     NeuroSkyAssets/ <-- necessarily inside Assets, not Assets/Assets/NeuroSkyAssets!
@@ -160,14 +159,14 @@ YUI/
       Scenes/
   Packages/
   ProjectSettings/
---------------------------------------------------------------
+}
 
 Interaction Unity <-> Backend
 1. The Unity client connects to ThinkGear Connector and receives the data stream.
 2. MindWaveHttpSender periodically generates a JSON of the following type:
---------------------------------------------------------------
+{
 {"concentration": 65, "relaxation": 42, "poor_signal": 0 }
---------------------------------------------------------------
+}
 
 3. Sends a POST request to the endpoint specified in endpointUrl (for example, http://127.0.0.1:8000/api/analyze).
 4. The backend processes the request (as described above) and returns a response.
@@ -188,33 +187,33 @@ Unity 2022.3 LTS (or compatible version)
 Running the backend
 1. Clone the repository and go to the backend folder.
 2. Create a virtual environment and activate it:
---------------------------------------------------------------
+{
 python -m venv venv
 source venv/bin/active # Linux/macOS
 venv\Scripts\activate # Windows
---------------------------------------------------------------
+}
 
 3. Set dependencies:
---------------------------------------------------------------
+{
 pip install -r requirements.txt
---------------------------------------------------------------
+}
 
 4. Create a.env file based on.env.example and specify the correct parameters for connecting to the database, Ollama and noise threshold.
 5. Make sure PostgreSQL is running and the data_original table exists. If not — create it manually (the structure above) or use the old parser_bd.py script (but it is not recommended for use).
 6. Check access to the database:
---------------------------------------------------------------
+{
 python scripts/init_database.py
---------------------------------------------------------------
+}
 
 7. Check the connection with Ollama (optional):
---------------------------------------------------------------
+{
 python scripts/test_ollama.py
---------------------------------------------------------------
+}
 
 8. Start the server:
---------------------------------------------------------------
+{
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
---------------------------------------------------------------
+}
 
 Setting up and running the Unity client
 1. Open Unity Hub and add a project by selecting the root folder (the one where Assets/, Packages/, ProjectSettings/are located).
@@ -231,17 +230,16 @@ API documentation (briefly)
 Detailed documentation is available in Swagger: http://localhost:8000/docs.
 The main endpoints are:
 
-Method | Path | Description
+Method |      Path              | Description
 --------------------------------------------------------------
-POST | /api/analyze | Accepts EEG data, returns emotion and recommendation.
-GET | /api/ranges | Returns current emotional ranges and centers.
-GET | /api/calibration-range | Returns valid parameter bounds and noise threshold.
-GET | / | Welcome Message and Link to/docs.
-GET | /health | Health Check (ok status).
+POST   | /api/analyze           | Accepts EEG data, returns emotion and recommendation.
+GET    | /api/ranges            | Returns current emotional ranges and centers.
+GET    | /api/calibration-range | Returns valid parameter bounds and noise threshold.
+GET    | /                      | Welcome Message and Link to/docs.
+GET    | /health                | Health Check (ok status).
 --------------------------------------------------------------
 
 Example of a successful response (/api/analyze):
---------------------------------------------------------------
 {
   "status": "success",
   "detected_emotion": "CALM",
@@ -250,25 +248,22 @@ Example of a successful response (/api/analyze):
   "global_average": {"concentration": 54.23, "relaxation": 48.75, "total_records": 7653},
   "deviation": {"concentration": -24.23, "relaxation": 21.25 }
 }
---------------------------------------------------------------
 
 An example of a response at high noise levels (HTTP 400) is
---------------------------------------------------------------
 {
   "status": "error",
   "error": "high_interference",
   "message": "Interference level is too high. Please just your headset.",
   "details": {"concentration": 30, "relaxation": 20, "poor_signal": 30}
 }
---------------------------------------------------------------
 
 Logging
 All events are written to the file backend/logs/requests.log in the following format:
---------------------------------------------------------------
+{
 [2025-01-01 12:00:00] INCOMING concentration=30.0, relaxation=20.0, poor_signal=15.0
 [2025-01-01 12:00:01] REJECTED concentration=30.0, relaxation=20.0, poor_signal=30.0, reason="high_interference"
 [2025-01-01 12:00:02] PROCESSED emission=CALM, concentration=30.0, relaxation=70.0, global_avg_concentration=54.23, global_avg_relaxation=48.75, recommendation="You are in a state of calm..."
---------------------------------------------------------------
+}
 
 The logging layer is controlled by the DEBUG parameter in.env.
 
