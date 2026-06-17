@@ -9,7 +9,7 @@ namespace MindWave
     public class MindWaveHttpSender : MonoBehaviour
     {
         [Header("HTTP settings")]
-        public string endpointUrl = "Your-admin-or-ip-addres";
+        public string endpointUrl = "http://backend.com:8000/api/analyze";
 
         [Tooltip("How often to send data. 1.0 = once per second, 0.5 = twice per second")]
         public float sendInterval = 1.0f;
