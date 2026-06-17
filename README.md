@@ -34,10 +34,10 @@ Neuro Assistant is an intelligent **client-server platform** that reads brain si
 
 ```
 ┌──────────────────┐         HTTP POST         ┌──────────────────┐
-│                  │  ───────────────────────>  │                  │
+│                  │  ───────────────────────> │                  │
 │   🎧 Unity App   │                           │  ⚡ FastAPI       │
-│   (MindWave)     │  <───────────────────────  │  Backend         │
-│                  │        JSON Response       │                  │
+│   (MindWave)     │  <─────────────────────── │  Backend         │
+│                  │        JSON Response      │                  │
 └──────────────────┘                           └────────┬─────────┘
                                                         │
                                               ┌─────────▼─────────┐
@@ -47,8 +47,8 @@ Neuro Assistant is an intelligent **client-server platform** that reads brain si
                                                         │
                                               ┌─────────▼─────────┐
                                               │   🦙 Ollama LLM   │
-                                              │   (Recommendations)│
-                                              └──────────────────┘
+                                              │ (Recommendations) │
+                                              └───────────────────┘
 ```
 
 ---
