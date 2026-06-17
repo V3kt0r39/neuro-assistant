@@ -35,7 +35,7 @@ Neuro Assistant is an intelligent **client-server platform** that reads brain si
 ```
 ┌──────────────────┐         HTTP POST         ┌──────────────────┐
 │                  │  ───────────────────────> │                  │
-│   🎧 Unity App   │                          │  ⚡ FastAPI      │
+│   🎧 Unity App   │                           │  ⚡ FastAPI       │
 │   (MindWave)     │  <─────────────────────── │  Backend         │
 │                  │        JSON Response      │                  │
 └──────────────────┘                           └────────┬─────────┘
