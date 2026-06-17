@@ -228,7 +228,6 @@ Method |      Path              | Description
 POST   | /api/analyze           | Accepts EEG data, returns emotion and recommendation.
 GET    | /api/ranges            | Returns current emotional ranges and centers.
 GET    | /api/calibration-range | Returns valid parameter bounds and noise threshold.
-GET    | /                      | Welcome Message and Link to/docs.
 GET    | /health                | Health Check (ok status).
 --------------------------------------------------------------
 ```
