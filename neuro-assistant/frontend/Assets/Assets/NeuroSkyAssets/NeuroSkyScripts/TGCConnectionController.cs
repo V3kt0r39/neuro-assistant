@@ -178,7 +178,7 @@ namespace MindWave
             public int attention = 0;
             public int meditation = 0;
 
-            // Оставил для совместимости, хотя в ThinkGear eegPower обычно лежит НЕ внутри eSense.
+            // Kept for compatibility, although in ThinkGear eegPower is usually NOT inside eSense.
             public PowerData eegPower = null;
 
             public SenseData()
@@ -195,7 +195,7 @@ namespace MindWave
 
             public SenseData eSense = null;
 
-            // В ThinkGear Connector eegPower обычно находится здесь, на верхнем уровне JSON.
+            // In ThinkGear Connector, eegPower is usually here, at the top level of JSON.
             public PowerData eegPower = null;
 
             public PackatData()
@@ -304,7 +304,7 @@ namespace MindWave
                 jsonBuffer = jsonBuffer.Substring(lastCompleteEnd);
             }
 
-            // Защита от бесконечного роста буфера, если пришёл мусор или повреждённый JSON.
+            // Protection against infinite buffer growth if garbage or corrupted JSON is received.
             if (jsonBuffer.Length > 20000)
             {
                 jsonBuffer = string.Empty;

@@ -7,7 +7,7 @@ public class Author : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Все скрипты, файлы и чертежи YUI-ассистента, её нейроинтерфейса и клиенской части написаны Kosyagami (King_Hold);
+        //All scripts, files and blueprints of the YUI assistant, its neurointerface and client part were written by Kosyagami (King_Hold);
     }
 
     // Update is called once per frame

@@ -9,12 +9,12 @@ namespace MindWave
     public class MindWaveHttpSender : MonoBehaviour
     {
         [Header("HTTP settings")]
-        public string endpointUrl = "";
+        public string endpointUrl = "Your-admin-or-ip-addres";
 
-        [Tooltip("Как часто отправлять данные. 1.0 = раз в секунду, 0.5 = два раза в секунду")]
+        [Tooltip("How often to send data. 1.0 = once per second, 0.5 = twice per second")]
         public float sendInterval = 1.0f;
 
-        [Tooltip("Отправлять запрос только если attention или meditation изменились")]
+        [Tooltip("Send request only if attention or meditation changed")]
         public bool sendOnlyWhenValuesChanged = true;
 
         [Header("Debug")]
@@ -55,12 +55,12 @@ namespace MindWave
             public string detected_emotion;
             public string ai_recommendation;
 
-            // Эти поля есть в твоём реальном ответе на скриншоте.
+            // These fields are present in your actual response screenshot.
             public string session_token;
             public string detection_method;
             public string recommendation_source;
 
-            // На случай если backend вернёт ошибку.
+            // In case the backend returns an error.
             public string detail;
             public string error;
             public string message;
@@ -126,8 +126,8 @@ namespace MindWave
                     continue;
                 }
 
-                // Если сигнал плохой, можно не отправлять мусорные значения.
-                // poorSignal = 0 — хороший сигнал.
+                // If signal is poor, skip sending garbage values.
+                // poorSignal = 0 means good signal.
                 if (poorSignal >= 200)
                 {
                     Debug.LogWarning("MindWaveHttpSender: poor signal, request skipped. poorSignal = " + poorSignal);
@@ -156,10 +156,10 @@ namespace MindWave
 
             AnalyzeRequest requestData = new AnalyzeRequest
             {
-                // В backend attention отправляем как concentration.
+                // In backend, attention is sent as concentration.
                 concentration = attention,
 
-                // В backend meditation отправляем как relaxation.
+                // In backend, meditation is sent as relaxation.
                 relaxation = meditation,
 
                 poor_signal = poorSignal
