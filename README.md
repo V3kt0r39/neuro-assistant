@@ -42,8 +42,8 @@ Neuro Assistant is an intelligent **client-server platform** that reads brain si
                                                         │
                                               ┌─────────▼─────────┐
                                               │   🐘 PostgreSQL   │
-                                              │   (EEG Data)     │
-                                              └──────────────────┘
+                                              │   (EEG Data)      │
+                                              └───────────────────┘
                                                         │
                                               ┌─────────▼─────────┐
                                               │   🦙 Ollama LLM   │
