@@ -285,7 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d717dd981c0d9342852766e79a5f1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  endpointUrl: http://stray-lid2.mooo.com:8000/api/analyze
+  endpointUrl: 
   sendInterval: 0.1
   sendOnlyWhenValuesChanged: 0
   logRequestJson: 1

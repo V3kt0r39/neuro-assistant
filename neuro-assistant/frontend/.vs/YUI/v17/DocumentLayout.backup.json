@@ -1,17 +1,21 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Unity\\YUI\\",
+  "WorkspaceRootPath": "C:\\Users\\GP5\\Documents\\Unity\\YUI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DFD1B8E4-D020-D766-CEB8-FF184B688F94}|Assembly-CSharp.csproj|d:\\unity\\yui\\assets\\assets\\neuroskyassets\\neuroskyscripts\\mindwavehttpsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DFD1B8E4-D020-D766-CEB8-FF184B688F94}|Assembly-CSharp.csproj|C:\\Users\\GP5\\Documents\\Unity\\YUI\\assets\\assets\\neuroskyassets\\neuroskyscripts\\mindwavehttpsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DFD1B8E4-D020-D766-CEB8-FF184B688F94}|Assembly-CSharp.csproj|solutionrelative:assets\\assets\\neuroskyassets\\neuroskyscripts\\mindwavehttpsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DFD1B8E4-D020-D766-CEB8-FF184B688F94}|Assembly-CSharp.csproj|D:\\Unity\\YUI\\assets\\assets\\neuroskyassets\\neuroskyscripts\\displaydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DFD1B8E4-D020-D766-CEB8-FF184B688F94}|Assembly-CSharp.csproj|c:\\users\\gp5\\documents\\unity\\yui\\assets\\assets\\neuroskyassets\\neuroskyscripts\\author.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DFD1B8E4-D020-D766-CEB8-FF184B688F94}|Assembly-CSharp.csproj|solutionrelative:assets\\assets\\neuroskyassets\\neuroskyscripts\\author.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DFD1B8E4-D020-D766-CEB8-FF184B688F94}|Assembly-CSharp.csproj|C:\\Users\\GP5\\Documents\\Unity\\YUI\\assets\\assets\\neuroskyassets\\neuroskyscripts\\displaydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DFD1B8E4-D020-D766-CEB8-FF184B688F94}|Assembly-CSharp.csproj|solutionrelative:assets\\assets\\neuroskyassets\\neuroskyscripts\\displaydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DFD1B8E4-D020-D766-CEB8-FF184B688F94}|Assembly-CSharp.csproj|D:\\Unity\\YUI\\assets\\assets\\neuroskyassets\\neuroskyscripts\\tgcconnectioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DFD1B8E4-D020-D766-CEB8-FF184B688F94}|Assembly-CSharp.csproj|C:\\Users\\GP5\\Documents\\Unity\\YUI\\assets\\assets\\neuroskyassets\\neuroskyscripts\\tgcconnectioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DFD1B8E4-D020-D766-CEB8-FF184B688F94}|Assembly-CSharp.csproj|solutionrelative:assets\\assets\\neuroskyassets\\neuroskyscripts\\tgcconnectioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -25,42 +29,50 @@
           "SelectedChildIndex": 1,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Author.cs",
+              "DocumentMoniker": "C:\\Users\\GP5\\Documents\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\Author.cs",
+              "RelativeDocumentMoniker": "Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\Author.cs",
+              "ToolTip": "C:\\Users\\GP5\\Documents\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\Author.cs",
+              "RelativeToolTip": "Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\Author.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAB7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-16T20:48:04.957Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "MindWaveHttpSender.cs",
-              "DocumentMoniker": "D:\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\MindWaveHttpSender.cs",
+              "DocumentMoniker": "C:\\Users\\GP5\\Documents\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\MindWaveHttpSender.cs",
               "RelativeDocumentMoniker": "Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\MindWaveHttpSender.cs",
-              "ToolTip": "D:\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\MindWaveHttpSender.cs",
+              "ToolTip": "C:\\Users\\GP5\\Documents\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\MindWaveHttpSender.cs",
               "RelativeToolTip": "Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\MindWaveHttpSender.cs",
-              "ViewState": "AgIAAK4AAAAAAAAAAAAIwMEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAMEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-09T16:42:18.372Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "DisplayData.cs",
-              "DocumentMoniker": "D:\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\DisplayData.cs",
+              "DocumentMoniker": "C:\\Users\\GP5\\Documents\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\DisplayData.cs",
               "RelativeDocumentMoniker": "Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\DisplayData.cs",
-              "ToolTip": "D:\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\DisplayData.cs",
+              "ToolTip": "C:\\Users\\GP5\\Documents\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\DisplayData.cs",
               "RelativeToolTip": "Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\DisplayData.cs",
               "ViewState": "AgIAAE4AAAAAAAAAAAAYwGcAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-09T12:14:07.881Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-09T12:14:07.881Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "TGCConnectionController.cs",
-              "DocumentMoniker": "D:\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\TGCConnectionController.cs",
+              "DocumentMoniker": "C:\\Users\\GP5\\Documents\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\TGCConnectionController.cs",
               "RelativeDocumentMoniker": "Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\TGCConnectionController.cs",
-              "ToolTip": "D:\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\TGCConnectionController.cs",
+              "ToolTip": "C:\\Users\\GP5\\Documents\\Unity\\YUI\\Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\TGCConnectionController.cs",
               "RelativeToolTip": "Assets\\Assets\\NeuroSkyAssets\\NeuroSkyScripts\\TGCConnectionController.cs",
               "ViewState": "AgIAAMYBAAAAAAAAAADwv+UBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
